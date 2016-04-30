@@ -1,0 +1,56 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+#if(POLICY CMP0065)
+#    cmake_policy(SET CMP0065 NEW)
+#endif()
+
+PROJECT(2dGame)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+
+
+FILE(RELATIVE_PATH RESOURCE_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" "${CMAKE_CURRENT_SOURCE_DIR}/resources")
+# configure a header file to pass some of the CMake settings
+# to the source code
+CONFIGURE_FILE(
+        "${PROJECT_SOURCE_DIR}/src/Config.h.in"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/Config.h"
+)
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+
+SET(SOURCE_FILES
+        src/main.cpp
+        src/Game.cpp src/Game.h
+        src/Sprite.cpp src/Sprite.h
+        src/Scene.cpp src/Scene.h
+        src/Collusion.cpp src/Collusion.h
+        src/Animation.cpp src/Animation.h
+        src/SceneFactory.cpp src/SceneFactory.h
+        src/LuaScript.cpp src/LuaScript.h
+        src/Config.cpp src/Config.h)
+
+ADD_EXECUTABLE(2dGame ${SOURCE_FILES})
+
+INCLUDE(FindPkgConfig)
+
+#find sdl
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+
+#include python libs
+#FIND_PACKAGE(PythonLibs REQUIRED)
+#INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
+
+#include lua asd
+FIND_PACKAGE(Lua REQUIRED)
+INCLUDE_DIRECTORIES(${LUA_INCLUDE_DIR})
+
+#find boost
+#FIND_PACKAGE(Boost 1.60.0 COMPONENTS statechart)
+#INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+
+
+INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${LUA_LIBRARIES})
+#target_link_libraries(2dGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES})
