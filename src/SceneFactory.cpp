@@ -22,12 +22,37 @@ SDL_Rect SceneFactory::getRect(lua_State *L, int index) {
     }
     return SDL_Rect{d[0], d[1], d[2], d[3]};
 }
+SDL_Color SceneFactory::getColor(lua_State *L, int index) {
+    Uint8 d[4] = {0, 0, 0, 0}, i = 0;
+    if (lua_istable(L, index)) {
+        lua_pushnil(L);
 
+        for (i = 0; i < 4; i++) {
+            lua_next(L, -2);
+            d[i] = (Uint8) lua_tonumber(L, -1);
+            lua_pop(L, 1);
+        }
+
+        lua_pop(L, 1);
+    }
+    SDL_Color color;
+    color.r = d[0];
+    color.g = d[1];
+    color.b = d[2];
+    color.a = d[3];
+    return color;
+}
 void SceneFactory::loadTextures(lua_State *L, Scene *t_scene) {
+
+    lua_getglobal(L, "transparentColor");
+    SDL_Color tColor = SceneFactory::getColor(L, -1);
+    lua_pop(L, 1);
+
     // load textures
     lua_getglobal(L, "textures");
     if (!lua_istable(L, -1)) {
         std::cout << "textures are not table " << std::endl;
+        return;
     }
 
     lua_pushnil(L);
@@ -38,8 +63,8 @@ void SceneFactory::loadTextures(lua_State *L, Scene *t_scene) {
             if (nullptr == image) {
                 std::cout << "Could not load image: " << SDL_GetError() << std::endl;
             } else {
-                SDL_SetColorKey(image, SDL_TRUE, SDL_MapRGB(image->format, 105, 74, 46));
-                t_scene->addTexture(lua_tostring(L, -2), SDL_CreateTextureFromSurface(t_scene->getRenderer(), image));
+                SDL_SetColorKey(image, SDL_TRUE, SDL_MapRGB(image->format, tColor.r, tColor.g, tColor.b));
+                t_scene->addTexture(lua_tostring(L, -2),  SDL_CreateTextureFromSurface(t_scene->getRenderer(), image));
             }
             SDL_FreeSurface(image);
         }
@@ -58,10 +83,13 @@ Scene *SceneFactory::createScene(SDL_Renderer *t_renderer, const char *sceneScri
         throw std::runtime_error(strcat((char *) "Error scene script: ", lua_tostring(L, -1)));
     }
 
-    // prepare scene rendered for scene -- TODO get color form lua
-    SDL_SetRenderDrawColor(t_renderer, 105, 74, 46, 255);
+    lua_getglobal(L, "transparentColor");
+    SDL_Color tColor = SceneFactory::getColor(L, -1);
+    lua_pop(L, 1);
+
+    SDL_SetRenderDrawColor(t_renderer, tColor.r, tColor.g, tColor.b, tColor.a);
     SDL_RenderClear(t_renderer);
-    SDL_SetRenderDrawBlendMode(t_renderer, SDL_BLENDMODE_BLEND);
+
 
     Scene *scene = new Scene(t_renderer);
 
@@ -83,7 +111,7 @@ void SceneFactory::loadSprites(lua_State *L, Scene *t_scene) {
             Sprite *sprite = new Sprite();
             if (lua_istable(L, -1)) {
                 SDL_Rect startPos = SceneFactory::getRect(L, -1);
-                std::cout << startPos.h << " " << startPos.w << " " << startPos.x << " " << startPos.y << std::endl;
+                std::cout << "Starting position: "<< startPos.h << " " << startPos.w << " " << startPos.x << " " << startPos.y << std::endl;
                 sprite->setStartPost(startPos);
             }
 

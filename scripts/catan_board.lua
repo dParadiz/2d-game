@@ -1,37 +1,48 @@
 name = "catan-board";
-background = "../resources/spaceShip/farback.bmp";
-resources = "../resource/spaceShip/main_sprite.bmp";
-animations = {
-    fly = {
-        { 0, 0, 64, 29 },
-        { 0, 29, 64, 29 },
-        { 0, 58, 64, 29 },
-        { 0, 87, 64, 29 },
+animationsList = {
+    mountainTile = {
+        textureId = "main",
+        name = "mountainTile",
+        sequence = {
+            { 0, 0, 142, 164 }
+        }
     },
-    idle = {
-        { 0, 0, 64, 29 },
-    }
+
 };
+transparentColor = {255, 0, 255, 0}
 
 textures = {
-    main = "../resources/catan/board.bmp"
+    main = "../resources/catan/board.bmp",
+
 };
 
 sprites = {
+
     {
-        name = "boardTile1",
-        startPos = { 200, 200, 142, 164 },
-        firstFrame = { 0, 0, 142, 164 }, -- this is not needed probably
+        name = "boardTile1", -- currently not needed
+        startPos = { 200, 20, 142, 164 },
+        startingAnimation = "mountainTile",
+        animations = {
+            animationsList.mountainTile -- can not be empty
+        }
     },
     {
-        name = "boardTile2",
-        startPos = { 100, 100, 64, 29 },
-        firstFrame = { 0, 0, 64, 29 }, -- this is not needed probably
+        name = "boardTile1", -- currently not needed
+        startPos = { 342, 20, 142, 164 },
+        startingAnimation = "mountainTile",
+        animations = {
+            animationsList.mountainTile -- can not be empty
+        }
+    },
+    {
+        name = "boardTile1", -- currently not needed
+        startPos = { 271, 102, 142, 164 },
+        startingAnimation = "mountainTile",
+        animations = {
+            animationsList.mountainTile -- can not be empty
+        }
     }
+
 };
-actors = {
-    rocekt = {
-        sprite = "rocket"
-    }
-};
+
 
