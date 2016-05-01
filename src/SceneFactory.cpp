@@ -83,14 +83,7 @@ Scene *SceneFactory::createScene(SDL_Renderer *t_renderer, const char *sceneScri
         throw std::runtime_error(strcat((char *) "Error scene script: ", lua_tostring(L, -1)));
     }
 
-    lua_getglobal(L, "transparentColor");
-    SDL_Color tColor = SceneFactory::getColor(L, -1);
-    lua_pop(L, 1);
-
-    SDL_SetRenderDrawColor(t_renderer, tColor.r, tColor.g, tColor.b, tColor.a);
     SDL_RenderClear(t_renderer);
-
-
     Scene *scene = new Scene(t_renderer);
 
     SceneFactory::loadTextures(L, scene);
