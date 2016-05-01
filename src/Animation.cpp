@@ -5,10 +5,12 @@
 #include "Animation.h"
 
 
-Animation::Animation(const std::vector<SDL_Rect> &t_frames) : m_frames(t_frames) {
-    SDL_Rect srcRect = t_frames.at(2);
-    printf("%d %d %d %d\n", srcRect.x, srcRect.y, srcRect.w, srcRect.h);
+Animation::Animation(const std::vector<SDL_Rect> &t_frames, const std::string &t_textureId)
+        : m_frames(t_frames),
+          m_textureId(t_textureId) {
+
 }
+
 
 /*void Animation::start() {
     m_playing = true;
@@ -39,3 +41,9 @@ SDL_Rect Animation::getFrame(Uint32 t_time) {
 void Animation::setFps(int t_fps) {
     m_fps = 1000 / t_fps;
 }
+
+const std::string &Animation::getTextureId() const {
+    return m_textureId;
+}
+
+

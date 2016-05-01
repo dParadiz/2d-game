@@ -14,14 +14,14 @@ animations = {
 };
 
 textures = {
-    main = "../resources/spaceShip/main_sprite.bmp"
+    main = "../resources/catan/board.bmp"
 };
 
 sprites = {
     {
         name = "boardTile1",
-        startPos = { 200, 200, 64, 29 },
-        firstFrame = { 0, 0, 64, 29 }, -- this is not needed probably
+        startPos = { 200, 200, 142, 164 },
+        firstFrame = { 0, 0, 142, 164 }, -- this is not needed probably
     },
     {
         name = "boardTile2",

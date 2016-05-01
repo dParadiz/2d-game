@@ -16,12 +16,13 @@ extern "C" {
 
 class SceneFactory {
 
+protected:
+    static SDL_Rect getRect(lua_State *L, int index);
+    static void loadSprites(lua_State *pState, Scene *t_Scene);
+    static void loadTextures(lua_State *L, Scene *t_scene);
+
 public:
-    static Scene* createScene(SDL_Renderer *t_renderer, const char * t_sceneScript);
-
-    static void processSprites(lua_State *L, int i);
-
-    void processTable(lua_State *L, int i);
+    static Scene *createScene(SDL_Renderer *t_renderer, const char *t_sceneScript);
 };
 
 

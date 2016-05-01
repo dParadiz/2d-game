@@ -14,6 +14,7 @@ class Sprite {
 public:
     void notify(SDL_Event event);
 
+    Sprite();
     Sprite(SDL_Rect startPos);
 
     Sprite(SDL_Rect t_dstRect, SDL_Rect t_srcRect);
@@ -26,11 +27,16 @@ public:
 
     const char * getTextureId();
 
-    void update(int t_time);
+    void update(uint32_t t_time);
+
+    void setCurrentAnimation(const std::string &currentAnimation);
+
+    void setStartPost(SDL_Rect rect);
 
 private:
-    SDL_Rect srcRect;
-    SDL_Rect posRect;
+    SDL_Rect m_srcRect = {0, 0, 0, 0};
+    SDL_Rect m_posRect = {0, 0, 0, 0};
+    std::string m_currentAnimation;
     std::map<const std::string, std::shared_ptr<Animation>> m_animations;
 
 

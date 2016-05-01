@@ -23,16 +23,10 @@ void Game::init() {
         return;
     }
 
-    m_renderer = SDL_CreateRenderer(m_window, -1, 0);
     m_isRunning = true;
 
-    SDL_SetRenderDrawColor(m_renderer, 105, 74, 46, 255);
-    SDL_RenderClear(m_renderer);
-    SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
-
     // prepare scene
-
-    m_scene = SceneFactory::createScene(m_renderer, config.m_startingScene.c_str());
+    m_scene = SceneFactory::createScene(SDL_CreateRenderer(m_window, -1, 0), config.m_startingScene.c_str());
 
 }
 
@@ -81,11 +75,8 @@ void Game::update() {
 
 void Game::draw() {
 
-    SDL_RenderClear(m_renderer);
+    m_scene->draw();
 
-    m_scene->draw(m_renderer);
-
-    SDL_RenderPresent(m_renderer);
     SDL_UpdateWindowSurface(m_window);
     SDL_Delay(10);
 }
