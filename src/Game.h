@@ -1,7 +1,3 @@
-//
-// Created by marian on 7.2.2016.
-//
-
 #ifndef INC_2DGAME_GAME_H
 #define INC_2DGAME_GAME_H
 
@@ -11,9 +7,9 @@
 
 class Game {
 private:
-    bool m_isRunning = false;
-    SDL_Window *m_window = nullptr;
-    Scene *m_scene;
+    bool running = false;
+    SDL_Window *window = nullptr;
+    Scene *scene;
 public:
     void init();
 

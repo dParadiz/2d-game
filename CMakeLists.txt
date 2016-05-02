@@ -24,10 +24,8 @@ SET(SOURCE_FILES
         src/Game.cpp src/Game.h
         src/Sprite.cpp src/Sprite.h
         src/Scene.cpp src/Scene.h
-        src/Collusion.cpp src/Collusion.h
         src/Animation.cpp src/Animation.h
         src/SceneFactory.cpp src/SceneFactory.h
-        src/LuaScript.cpp src/LuaScript.h
         src/Config.cpp src/Config.h)
 
 ADD_EXECUTABLE(2dGame ${SOURCE_FILES})

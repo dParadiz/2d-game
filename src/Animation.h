@@ -1,7 +1,3 @@
-//
-// Created by dejan on 10.1.2016.
-//
-
 #ifndef INC_2DGAME_ANIMATION_H
 #define INC_2DGAME_ANIMATION_H
 
@@ -17,20 +13,20 @@ class Animation {
 
 public:
 
-    Animation(const std::vector<SDL_Rect> &t_frames, const std::string &t_textureId);
+    Animation(const std::vector<SDL_Rect> &frames, const std::string &textureId);
 
-    SDL_Rect getFrame(Uint32 t_time);
+    SDL_Rect getFrame(Uint32 time);
 
     const std::string &getTextureId() const;
 
-    void setFps(int t_fps);
+    void setFps(int targetFps);
 
-    size_t m_frame = 0;
+    size_t frame = 0;
 private:
-    std::vector<SDL_Rect> m_frames;
-    Uint32 m_timeTick = 0;
-    std::string m_textureId;
-    int m_fps = 24;
+    std::vector<SDL_Rect> frames;
+    Uint32 timeTick = 0;
+    std::string textureId;
+    int fps = 24;
 };
 
 

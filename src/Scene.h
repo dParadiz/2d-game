@@ -7,11 +7,11 @@
 
 class Scene {
 private:
-    std::map<const std::string, SDL_Texture*> m_textures;
-    SDL_Renderer *m_renderer;
+    std::map<const std::string, SDL_Texture*> textures;
+    SDL_Renderer *renderer;
 
 public:
-    std::vector<Sprite *> m_spriteList;
+    std::vector<Sprite *> spriteList;
     Scene(SDL_Renderer *pRenderer);
     ~Scene();
     void draw();
@@ -20,9 +20,9 @@ public:
 
     void addSprite(Sprite *sprite);
 
-    void update(uint32_t t_time);
+    void update(uint32_t time);
 
-    void addTexture(const std::string name, SDL_Texture *t_texture);
+    void addTexture(const std::string name, SDL_Texture *texture);
 
     SDL_Renderer *getRenderer();
 };

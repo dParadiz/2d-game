@@ -1,7 +1,3 @@
-//
-// Created by marian on 7.2.2016.
-//
-
 #include <iostream>
 #include "Game.h"
 #include "SceneFactory.h"
@@ -10,38 +6,39 @@
 void Game::init() {
     SDL_Init(SDL_INIT_VIDEO);
 
-    Config config("../scripts/config.lua");
-    //@todo read this from config
-    m_window = SDL_CreateWindow(config.m_title.c_str(),
+    Config config;
+    config.loadFromFile("../scripts/config.lua");
+
+    window = SDL_CreateWindow(config.title.c_str(),
                                 SDL_WINDOWPOS_UNDEFINED,
                                 SDL_WINDOWPOS_UNDEFINED,
-                                config.m_width, config.m_height,
+                                config.width, config.height,
                                 SDL_WINDOW_OPENGL);
 
-    if (NULL == m_window) {
+    if (NULL == window) {
         printf("Unable to create SDL window:%s\n", SDL_GetError());
         return;
     }
 
-    m_isRunning = true;
+    running = true;
 
     // prepare scene
-    m_scene = SceneFactory::createScene(SDL_CreateRenderer(m_window, -1, 0), config.m_startingScene.c_str());
+    scene = SceneFactory::createScene(SDL_CreateRenderer(window, -1, 0), config.startingScene.c_str());
 
 }
 
 bool Game::isRunning() {
-    return m_isRunning;
+    return running;
 }
 
 void Game::cleanUp() {
 
-    if (nullptr != m_scene) {
-        delete m_scene;
+    if (nullptr != scene) {
+        delete scene;
     }
 
-    if (nullptr != m_window) {
-        SDL_DestroyWindow(m_window);
+    if (nullptr != window) {
+        SDL_DestroyWindow(window);
     }
     SDL_Quit();
 }
@@ -52,16 +49,16 @@ void Game::handleInput() {
     while (SDL_PollEvent(&e) != 0) {
         //User requests quit
         if (e.type == SDL_QUIT) {
-            m_isRunning = false;
+            running = false;
         }
             //User presses a key
         else if (e.type == SDL_KEYDOWN) {
             //Select surfaces based on key press
             if (e.key.keysym.sym == SDLK_ESCAPE) {
-                m_isRunning = false;
+                running = false;
                 break;
             } else {
-                m_scene->notify(e);
+                scene->notify(e);
             }
         }
 
@@ -70,13 +67,13 @@ void Game::handleInput() {
 }
 
 void Game::update() {
-    m_scene->update(SDL_GetTicks());
+    scene->update(SDL_GetTicks());
 }
 
 void Game::draw() {
 
-    m_scene->draw();
+    scene->draw();
 
-    SDL_UpdateWindowSurface(m_window);
+    SDL_UpdateWindowSurface(window);
     SDL_Delay(10);
 }

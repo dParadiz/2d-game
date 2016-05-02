@@ -1,13 +1,9 @@
-//
-// Created by dejan on 10.1.2016.
-//
-
 #include "Animation.h"
 
 
-Animation::Animation(const std::vector<SDL_Rect> &t_frames, const std::string &t_textureId)
-        : m_frames(t_frames),
-          m_textureId(t_textureId) {
+Animation::Animation(const std::vector<SDL_Rect> &frames, const std::string &textureId)
+        : frames(frames),
+          textureId(textureId) {
 
 }
 
@@ -23,27 +19,27 @@ bool Animation::isPlaying() {
     return m_playing;
 }
  */
-SDL_Rect Animation::getFrame(Uint32 t_time) {
+SDL_Rect Animation::getFrame(Uint32 time) {
 
-    if (m_timeTick != m_fps * t_time / 1000) {
-        ++m_frame;
-        m_timeTick = m_fps * t_time / 1000;
+    if (timeTick != fps * time / 1000) {
+        ++frame;
+        timeTick = fps * time / 1000;
     }
     // loop
-    if (m_frame >= m_frames.size()) {
-        m_frame = 0;
+    if (frame >= frames.size()) {
+        frame = 0;
     }
 
-    return m_frames.at(m_frame);
+    return frames.at(frame);
 }
 
 
-void Animation::setFps(int t_fps) {
-    m_fps = 1000 / t_fps;
+void Animation::setFps(int targetFps) {
+    fps = 1000 / targetFps;
 }
 
 const std::string &Animation::getTextureId() const {
-    return m_textureId;
+    return textureId;
 }
 
 

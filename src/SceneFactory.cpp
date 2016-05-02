@@ -42,7 +42,7 @@ SDL_Color SceneFactory::getColor(lua_State *L, int index) {
     color.a = d[3];
     return color;
 }
-void SceneFactory::loadTextures(lua_State *L, Scene *t_scene) {
+void SceneFactory::loadTextures(lua_State *L, Scene *scene) {
 
     lua_getglobal(L, "transparentColor");
     SDL_Color tColor = SceneFactory::getColor(L, -1);
@@ -64,7 +64,7 @@ void SceneFactory::loadTextures(lua_State *L, Scene *t_scene) {
                 std::cout << "Could not load image: " << SDL_GetError() << std::endl;
             } else {
                 SDL_SetColorKey(image, SDL_TRUE, SDL_MapRGB(image->format, tColor.r, tColor.g, tColor.b));
-                t_scene->addTexture(lua_tostring(L, -2),  SDL_CreateTextureFromSurface(t_scene->getRenderer(), image));
+                scene->addTexture(lua_tostring(L, -2),  SDL_CreateTextureFromSurface(scene->getRenderer(), image));
             }
             SDL_FreeSurface(image);
         }
@@ -74,7 +74,7 @@ void SceneFactory::loadTextures(lua_State *L, Scene *t_scene) {
     lua_pop(L, 1);
 }
 
-Scene *SceneFactory::createScene(SDL_Renderer *t_renderer, const char *sceneScript) {
+Scene *SceneFactory::createScene(SDL_Renderer *renderer, const char *sceneScript) {
 
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
@@ -83,8 +83,8 @@ Scene *SceneFactory::createScene(SDL_Renderer *t_renderer, const char *sceneScri
         throw std::runtime_error(strcat((char *) "Error scene script: ", lua_tostring(L, -1)));
     }
 
-    SDL_RenderClear(t_renderer);
-    Scene *scene = new Scene(t_renderer);
+    SDL_RenderClear(renderer);
+    Scene *scene = new Scene(renderer);
 
     SceneFactory::loadTextures(L, scene);
     // SceneFactory::loadAnimations(L, scene);
@@ -93,7 +93,7 @@ Scene *SceneFactory::createScene(SDL_Renderer *t_renderer, const char *sceneScri
     return scene;
 }
 
-void SceneFactory::loadSprites(lua_State *L, Scene *t_scene) {
+void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
     lua_getglobal(L, "sprites");
     lua_pushnil(L);
     while (lua_next(L, -2) != 0) {
@@ -156,12 +156,12 @@ void SceneFactory::loadSprites(lua_State *L, Scene *t_scene) {
                     }
                     lua_pop(L, 1);
 
-                    sprite->addAnimations(animationName, new Animation(sequence, textureId));
+                    sprite->addAnimation(animationName, new Animation(sequence, textureId));
 
                 }
                 lua_pop(L, 1);
             }
-            t_scene->addSprite(sprite);
+            scene->addSprite(sprite);
         }
         lua_pop(L, 1);
     }

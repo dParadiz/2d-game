@@ -1,7 +1,3 @@
-//
-// Created by dejan on 26.2.2016.
-//
-
 #ifndef INC_2DGAME_CONFIG_H
 #define INC_2DGAME_CONFIG_H
 
@@ -17,17 +13,14 @@ extern "C" {
 #include <string>
 
 class Config {
-private:
-    lua_State *m_luaState;
+
 public:
-    int m_width;
-    int m_height;
-    std::string m_title;
-    std::string m_startingScene;
+    int width;
+    int height;
+    std::string title;
+    std::string startingScene;
+    void loadFromFile(std::string filename);
 
-    Config(std::string filename);
-
-    ~Config();
 };
 
 
