@@ -7,13 +7,16 @@
 
 class Scene {
 private:
-    std::map<const std::string, SDL_Texture*> textures;
+    std::map<const std::string, SDL_Texture *> textures;
     SDL_Renderer *renderer;
 
 public:
     std::vector<Sprite *> spriteList;
+
     Scene(SDL_Renderer *pRenderer);
+
     ~Scene();
+
     void draw();
 
     void notify(SDL_Event event);

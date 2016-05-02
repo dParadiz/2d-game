@@ -50,19 +50,14 @@ animationsList = {
         }
     }
 };
-transparentColor = { 255, 0, 255, 0 }
-
+transparentColor = { 255, 0, 255, 0 };
 textures = {
     main = "../resources/catan/board.bmp",
 };
-
-sprites = {};
 startX = 100;
 startY = 20;
-
 w = 71;
 h = 82;
-
 mapTiles = {
     {
         startPos = { 0, 0, 0, 0 },
@@ -180,9 +175,7 @@ mapTiles = {
         }
     }
 }
-function getBoardTile()
-end
-
+sprites = {};
 for i = 1, 37 do
     sea = false;
 

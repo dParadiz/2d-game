@@ -2,29 +2,6 @@
 
 void Sprite::notify(SDL_Event event) {
 
-    if (posRect.x == 0 && posRect.y == 0 && posRect.h == 0 && posRect.w == 0) {
-        return;
-    }
-
-    switch (event.key.keysym.sym) {
-        case SDLK_UP:
-            posRect.y -= 16;
-            break;
-        case SDLK_DOWN:
-            posRect.y += 16;
-            break;
-        case SDLK_RIGHT:
-            posRect.x += 16;
-            break;
-        case SDLK_LEFT:
-            posRect.x -= 16;
-            break;
-        case SDLK_SPACE:
-            //animationQueue.push("fly");
-            break;
-        default:
-            break;
-    }
 }
 
 SDL_Rect *Sprite::getSrcRect() {

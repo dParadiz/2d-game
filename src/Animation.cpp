@@ -7,18 +7,6 @@ Animation::Animation(const std::vector<SDL_Rect> &frames, const std::string &tex
 
 }
 
-
-/*void Animation::start() {
-    m_playing = true;
-}
-
-void Animation::stop() {
-    m_playing = false;
-}
-bool Animation::isPlaying() {
-    return m_playing;
-}
- */
 SDL_Rect Animation::getFrame(Uint32 time) {
 
     if (timeTick != fps * time / 1000) {

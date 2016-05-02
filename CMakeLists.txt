@@ -9,14 +9,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 
-FILE(RELATIVE_PATH RESOURCE_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" "${CMAKE_CURRENT_SOURCE_DIR}/resources")
-# configure a header file to pass some of the CMake settings
-# to the source code
-CONFIGURE_FILE(
-        "${PROJECT_SOURCE_DIR}/src/Config.h.in"
-        "${CMAKE_CURRENT_SOURCE_DIR}/include/Config.h"
-)
-
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 SET(SOURCE_FILES

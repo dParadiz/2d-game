@@ -19,6 +19,7 @@ public:
     int height;
     std::string title;
     std::string startingScene;
+
     void loadFromFile(std::string filename);
 
 };

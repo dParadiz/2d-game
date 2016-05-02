@@ -1,10 +1,5 @@
-//
-// Created by dejan on 25.2.2016.
-//
 #include <iostream>
 #include <stdexcept>
-
-
 #include "SceneFactory.h"
 
 SDL_Rect SceneFactory::getRect(lua_State *L, int index) {
@@ -22,6 +17,7 @@ SDL_Rect SceneFactory::getRect(lua_State *L, int index) {
     }
     return SDL_Rect{d[0], d[1], d[2], d[3]};
 }
+
 SDL_Color SceneFactory::getColor(lua_State *L, int index) {
     Uint8 d[4] = {0, 0, 0, 0}, i = 0;
     if (lua_istable(L, index)) {
@@ -42,6 +38,7 @@ SDL_Color SceneFactory::getColor(lua_State *L, int index) {
     color.a = d[3];
     return color;
 }
+
 void SceneFactory::loadTextures(lua_State *L, Scene *scene) {
 
     lua_getglobal(L, "transparentColor");
@@ -64,7 +61,7 @@ void SceneFactory::loadTextures(lua_State *L, Scene *scene) {
                 std::cout << "Could not load image: " << SDL_GetError() << std::endl;
             } else {
                 SDL_SetColorKey(image, SDL_TRUE, SDL_MapRGB(image->format, tColor.r, tColor.g, tColor.b));
-                scene->addTexture(lua_tostring(L, -2),  SDL_CreateTextureFromSurface(scene->getRenderer(), image));
+                scene->addTexture(lua_tostring(L, -2), SDL_CreateTextureFromSurface(scene->getRenderer(), image));
             }
             SDL_FreeSurface(image);
         }
@@ -104,12 +101,12 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
             Sprite *sprite = new Sprite();
             if (lua_istable(L, -1)) {
                 SDL_Rect startPos = SceneFactory::getRect(L, -1);
-                std::cout << "Starting position: "<< startPos.h << " " << startPos.w << " " << startPos.x << " " << startPos.y << std::endl;
+                std::cout << "Starting position: " << startPos.h << " " << startPos.w << " " << startPos.x << " " <<
+                startPos.y << std::endl;
                 sprite->setStartPost(startPos);
             }
 
             lua_pop(L, 1);
-
 
 
             lua_getfield(L, -1, "startingAnimation");

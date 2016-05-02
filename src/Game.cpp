@@ -10,10 +10,10 @@ void Game::init() {
     config.loadFromFile("../scripts/config.lua");
 
     window = SDL_CreateWindow(config.title.c_str(),
-                                SDL_WINDOWPOS_UNDEFINED,
-                                SDL_WINDOWPOS_UNDEFINED,
-                                config.width, config.height,
-                                SDL_WINDOW_OPENGL);
+                              SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED,
+                              config.width, config.height,
+                              SDL_WINDOW_OPENGL);
 
     if (NULL == window) {
         printf("Unable to create SDL window:%s\n", SDL_GetError());

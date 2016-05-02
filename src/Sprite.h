@@ -15,6 +15,7 @@ public:
     void notify(SDL_Event event);
 
     Sprite();
+
     Sprite(SDL_Rect startPos);
 
     Sprite(SDL_Rect dstRect, SDL_Rect srcRect);
@@ -25,7 +26,7 @@ public:
 
     void addAnimation(const std::string name, Animation *animation);
 
-    const char * getTextureId();
+    const char *getTextureId();
 
     void update(uint32_t time);
 

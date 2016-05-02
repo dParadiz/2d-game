@@ -14,8 +14,11 @@ class SceneFactory {
 
 private:
     static SDL_Rect getRect(lua_State *L, int index);
+
     static void loadSprites(lua_State *pState, Scene *scene);
+
     static void loadTextures(lua_State *L, Scene *scene);
+
     static SDL_Color getColor(lua_State *L, int index);
 
 public:

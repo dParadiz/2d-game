@@ -1,8 +1,8 @@
 #include "Config.h"
 #include <iostream>
 
-void Config::loadFromFile(std::string filename)  {
-    lua_State * luaState = lua_open();
+void Config::loadFromFile(std::string filename) {
+    lua_State *luaState = lua_open();
 
     if (luaL_loadfile(luaState, filename.c_str()) || lua_pcall(luaState, 0, 0, 0)) {
         std::cout << "cannot run configuration file:" << lua_tostring(luaState, -1) << std::endl;
