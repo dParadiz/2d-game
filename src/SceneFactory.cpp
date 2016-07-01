@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdexcept>
 #include "SceneFactory.h"
 
 SDL_Rect SceneFactory::getRect(lua_State *L, int index) {
@@ -116,6 +115,27 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
             }
             lua_pop(L, 1);
 
+            lua_getfield(L, -1, "controllable");
+            if (lua_toboolean(L, -1)) {
+                std::cout << "Setting controllable flag for the sprite"<< std::endl;
+                sprite->isControllable = (bool)lua_toboolean(L, -1);
+            }
+            lua_pop(L, 1);
+
+            lua_getfield(L, -1, "hidden");
+            if (lua_toboolean(L, -1)) {
+                std::cout << "Setting visible flag for the sprite"<< std::endl;
+                sprite->isVisible =  !(bool)lua_toboolean(L, -1);
+            }
+            lua_pop(L, 1);
+
+            lua_getfield(L, -1, "bullet");
+            if (lua_toboolean(L, -1)) {
+                std::cout << "Setting bullet flag for the sprite"<< std::endl;
+                sprite->isBullet =  (bool)lua_toboolean(L, -1);
+            }
+            lua_pop(L, 1);
+
             // load sprite animations
             lua_getfield(L, -1, "animations");
             if (lua_istable(L, -1)) {
@@ -161,6 +181,8 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
             scene->addSprite(sprite);
         }
         lua_pop(L, 1);
+
+
     }
     lua_pop(L, 1);
 }

@@ -34,9 +34,18 @@ public:
 
     void setStartPost(SDL_Rect rect);
 
+    Sprite *clone();
+
+    bool isControllable  = false;
+    bool isVisible = true;
+    bool isBullet = false;
+    bool replicateAndMove = false;
+    bool isClone = false;
+
 private:
     SDL_Rect srcRect = {0, 0, 0, 0};
     SDL_Rect posRect = {0, 0, 0, 0};
+
     std::string currentAnimation;
     std::map<const std::string, std::shared_ptr<Animation>> animations;
 

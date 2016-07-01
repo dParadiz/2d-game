@@ -52,7 +52,7 @@ void Game::handleInput() {
             running = false;
         }
             //User presses a key
-        else if (e.type == SDL_KEYDOWN) {
+        else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
             //Select surfaces based on key press
             if (e.key.keysym.sym == SDLK_ESCAPE) {
                 running = false;

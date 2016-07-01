@@ -1,4 +1,4 @@
-width = 640
-height = 480
+width = 800
+height = 600
 title = "2d gameXX"
-startingScene = "catan_board"
+startingScene = "space_ship"

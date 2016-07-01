@@ -17,6 +17,20 @@ void Scene::draw() {
     SDL_RenderClear(renderer);
 
     for (Sprite *sprite: spriteList) {
+        if (sprite->replicateAndMove) {
+            sprite->replicateAndMove = false;
+
+            Sprite * spriteReplica = sprite->clone();
+            spriteReplica->isControllable = false;
+            spriteReplica->isVisible = true;
+            Scene::addSprite(spriteReplica);
+        }
+
+
+        if (!sprite->isVisible) {
+            continue;
+        }
+
         SDL_Texture *texture = textures[sprite->getTextureId()];
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
         SDL_RenderCopy(renderer, texture, sprite->getSrcRect(), sprite->getPosition());
