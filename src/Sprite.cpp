@@ -28,7 +28,7 @@ void Sprite::notify(SDL_Event event) {
             }
             break;
         case SDLK_SPACE:
-            if (isBullet && event.type == SDL_KEYUP) {
+            if (isBullet && event.type == SDL_KEYDOWN) {
                 replicateAndMove = true;
             }
             break;

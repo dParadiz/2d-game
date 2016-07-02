@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "Scene.h"
 
 void Scene::addSprite(Sprite *sprite) {
@@ -17,15 +18,6 @@ void Scene::draw() {
     SDL_RenderClear(renderer);
 
     for (Sprite *sprite: spriteList) {
-        if (sprite->replicateAndMove) {
-            sprite->replicateAndMove = false;
-
-            Sprite * spriteReplica = sprite->clone();
-            spriteReplica->isControllable = false;
-            spriteReplica->isVisible = true;
-            Scene::addSprite(spriteReplica);
-        }
-
 
         if (!sprite->isVisible) {
             continue;
@@ -40,9 +32,32 @@ void Scene::draw() {
 }
 
 void Scene::update(uint32_t time) {
-    for (Sprite *sprite: spriteList) {
+    std::vector<Sprite *> v;
+
+    for (Sprite * sprite: spriteList) {
+
+        if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 100) {
+            sprite->replicateAndMove = false;
+            sprite->replicatedAt = time;
+            Sprite *spriteReplica = sprite->clone();
+            spriteReplica->isControllable = false;
+            spriteReplica->replicateAndMove = false;
+            spriteReplica->isVisible = true;
+
+            v.push_back(spriteReplica);
+        }
+
         sprite->update(time);
+        //clean up sprites
+        if (sprite->getPosition()->y < 0) {
+            sprite->canBeRemoved = true;
+        }
+
     }
+
+    auto canBeRemoved = [](Sprite *sprite) { return sprite->canBeRemoved; };
+    spriteList.erase(std::remove_if(spriteList.begin(), spriteList.end(), canBeRemoved), spriteList.end());
+    spriteList.insert(spriteList.end(), v.begin(), v.end());
 }
 
 void Scene::addTexture(const std::string name, SDL_Texture *texture) {

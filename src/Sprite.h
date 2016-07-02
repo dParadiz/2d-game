@@ -40,6 +40,8 @@ public:
     bool isVisible = true;
     bool isBullet = false;
     bool replicateAndMove = false;
+    uint32_t replicatedAt;
+    bool canBeRemoved = false;
     bool isClone = false;
 
 private:

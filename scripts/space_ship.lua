@@ -22,7 +22,7 @@ animationsList = {
         }
     },
 }
-transparentColor = { 255, 0, 255, 0 };
+transparentColor = { 0, 0, 0, 0 };
 textures = {
     player = "../resources/png/player.bmp",
     enemy = "../resources/png/enemyShip.bmp",
@@ -50,7 +50,27 @@ sprites = {
         controllable = false
     },
     {
+        startPos = { 160, 120, 6, 22 },
+        startingAnimation = "laserShot",
+        animations = {
+            animationsList.laserShot
+        },
+        controllable = true,
+        hidden = true,
+        bullet = true,
+    },
+    {
         startPos = { 100, 120, 6, 22 },
+        startingAnimation = "laserShot",
+        animations = {
+            animationsList.laserShot
+        },
+        controllable = true,
+        hidden = true,
+        bullet = true,
+    },
+    {
+        startPos = { 130, 120, 6, 22 },
         startingAnimation = "laserShot",
         animations = {
             animationsList.laserShot
