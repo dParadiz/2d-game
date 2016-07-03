@@ -19,7 +19,7 @@ public:
 
     void draw();
 
-    void notify(SDL_Event event);
+    void notify(const Uint8  *state);
 
     void addSprite(Sprite *sprite);
 

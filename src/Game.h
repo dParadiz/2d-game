@@ -15,7 +15,7 @@ public:
 
     void handleInput();
 
-    void update();
+    void update(uint32_t timeTick);
 
     void draw();
 

@@ -1,39 +1,29 @@
 #include "Sprite.h"
 
-void Sprite::notify(SDL_Event event) {
+void Sprite::notify(const Uint8 *state) {
 
     if (!isControllable) {
         return;
     }
 
-    switch (event.key.keysym.sym) {
-        case SDLK_LEFT:
-            if (event.type == SDL_KEYDOWN) {
-                posRect.x -= 20;
-            }
-            break;
-        case SDLK_RIGHT:
-            if (event.type == SDL_KEYDOWN) {
-                posRect.x += 20;
-            }
-            break;
-        case SDLK_UP:
-            if (event.type == SDL_KEYDOWN) {
-                posRect.y -= 20;
-            }
-            break;
-        case SDLK_DOWN:
-            if (event.type == SDL_KEYDOWN) {
-                posRect.y += 20;
-            }
-            break;
-        case SDLK_SPACE:
-            if (isBullet && event.type == SDL_KEYDOWN) {
-                replicateAndMove = true;
-            }
-            break;
-        default:
-            return;
+    if (state[SDL_SCANCODE_LEFT]) {
+        posRect.x -= 10;
+    }
+
+    if (state[SDL_SCANCODE_RIGHT]) {
+        posRect.x += 10;
+    }
+
+    if (state[SDL_SCANCODE_UP]) {
+        posRect.y -= 10;
+    }
+
+    if (state[SDL_SCANCODE_DOWN]) {
+        posRect.y += 10;
+    }
+
+    if (state[SDL_SCANCODE_SPACE] && isBullet) {
+        replicateAndMove = true;
     }
 }
 
@@ -52,7 +42,7 @@ SDL_Rect *Sprite::getPosition() {
     }
 
     if (isBullet && isClone) {
-        posRect.y -= 10;
+        posRect.y -= 2;
     }
 
     return &posRect;

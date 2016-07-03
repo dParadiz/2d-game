@@ -44,30 +44,23 @@ void Game::cleanUp() {
 }
 
 void Game::handleInput() {
-    SDL_Event e;
 
-    while (SDL_PollEvent(&e) != 0) {
-        //User requests quit
-        if (e.type == SDL_QUIT) {
-            running = false;
-        }
-            //User presses a key
-        else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
-            //Select surfaces based on key press
-            if (e.key.keysym.sym == SDLK_ESCAPE) {
-                running = false;
-                break;
-            } else {
-                scene->notify(e);
-            }
-        }
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
 
+    if (state[SDL_SCANCODE_ESCAPE]) {
+        running = false;
+        return;
     }
+
+
+    scene->notify(state);
+    SDL_PumpEvents();
+
 
 }
 
-void Game::update() {
-    scene->update(SDL_GetTicks());
+void Game::update(uint32_t timeTick) {
+    scene->update(timeTick);
 }
 
 void Game::draw() {

@@ -12,7 +12,7 @@
 class Sprite {
 
 public:
-    void notify(SDL_Event event);
+    void notify(const Uint8 *state);
 
     Sprite();
 

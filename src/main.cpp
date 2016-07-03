@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "Game.h"
 
 
@@ -9,12 +10,19 @@ int main() {
     Game game;
 
     game.init();
-
+    auto prevTimeTick = 0;
+    int fps = 1000/64;
     //game loop
     while (game.isRunning()) {
-        game.handleInput();
-        game.update();
-        game.draw();
+        auto timeTick = SDL_GetTicks();
+        if (timeTick - prevTimeTick > fps) {
+            game.handleInput();
+            game.update(timeTick);
+            game.draw();
+        } else {
+            usleep(fps - (timeTick - prevTimeTick));
+        }
+
     }
 
     game.cleanUp();

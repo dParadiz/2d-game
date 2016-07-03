@@ -6,10 +6,10 @@ void Scene::addSprite(Sprite *sprite) {
     spriteList.push_back(sprite);
 }
 
-void Scene::notify(SDL_Event event) {
+void Scene::notify(const Uint8 *state) {
 
     for (Sprite *sprite: spriteList) {
-        sprite->notify(event);
+        sprite->notify(state);
     }
 }
 
@@ -36,7 +36,7 @@ void Scene::update(uint32_t time) {
 
     for (Sprite * sprite: spriteList) {
 
-        if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 100) {
+        if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 1000) {
             sprite->replicateAndMove = false;
             sprite->replicatedAt = time;
             Sprite *spriteReplica = sprite->clone();
