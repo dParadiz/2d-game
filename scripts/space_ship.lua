@@ -31,7 +31,7 @@ textures = {
 sprites = {
 
     {
-        startPos = { 100, 100, 66, 50 },
+        startPos = { 100, 500, 66, 50 },
         startingAnimation = "player",
         animations = {
             animationsList.player
@@ -47,37 +47,49 @@ sprites = {
         animations = {
             animationsList.enemy
         },
-        controllable = false
+        controllable = false,
+        enemyAI = true,
+
     },
     {
-        startPos = { 160, 120, 6, 22 },
+        startPos = { 700, 10, 66, 50 },
+        startingAnimation = "enemy",
+        animations = {
+            animationsList.enemy
+        },
+        controllable = false,
+        enemyAI = true,
+
+    },
+    {
+        startPos = { 100, 50, 66, 50 },
+        startingAnimation = "enemy",
+        animations = {
+            animationsList.enemy
+        },
+        controllable = false,
+        enemyAI = true,
+
+    },
+    {
+        startPos = { 160, 520, 6, 22 },
         startingAnimation = "laserShot",
         animations = {
             animationsList.laserShot
         },
         controllable = true,
         hidden = true,
-        bullet = true,
+        ammunition = true,
     },
     {
-        startPos = { 100, 120, 6, 22 },
+        startPos = { 100, 520, 6, 22 },
         startingAnimation = "laserShot",
         animations = {
             animationsList.laserShot
         },
         controllable = true,
         hidden = true,
-        bullet = true,
-    },
-    {
-        startPos = { 130, 120, 6, 22 },
-        startingAnimation = "laserShot",
-        animations = {
-            animationsList.laserShot
-        },
-        controllable = true,
-        hidden = true,
-        bullet = true,
+        ammunition = true,
     },
 
 }

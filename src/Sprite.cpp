@@ -1,30 +1,54 @@
 #include "Sprite.h"
+#include <ctime>
 
 void Sprite::notify(const Uint8 *state) {
 
-    if (!isControllable) {
-        return;
+    std::srand((unsigned int) std::time(0));
+
+    if (state[SDL_SCANCODE_SPACE] && isAmmunition) {
+        replicateAndMove = true;
     }
 
-    if (state[SDL_SCANCODE_LEFT]) {
+
+    if (!isEnemy && isControllable) {
+
+        if (state[SDL_SCANCODE_LEFT]) {
+            move(1);
+        }
+
+        if (state[SDL_SCANCODE_RIGHT]) {
+            move(2);
+        }
+
+        if (state[SDL_SCANCODE_UP]) {
+            //move(4);
+        }
+
+        if (state[SDL_SCANCODE_DOWN]) {
+            //move(3);
+        }
+
+    }
+}
+
+void Sprite::move(const int direction) {
+    if (direction == 1) {
         posRect.x -= 10;
     }
 
-    if (state[SDL_SCANCODE_RIGHT]) {
+    if (direction == 2) {
         posRect.x += 10;
     }
 
-    if (state[SDL_SCANCODE_UP]) {
+    if (direction == 4) {
         posRect.y -= 10;
     }
 
-    if (state[SDL_SCANCODE_DOWN]) {
+    if (direction == 3 ) {
         posRect.y += 10;
     }
 
-    if (state[SDL_SCANCODE_SPACE] && isBullet) {
-        replicateAndMove = true;
-    }
+
 }
 
 SDL_Rect *Sprite::getSrcRect() {
@@ -63,6 +87,29 @@ void Sprite::addAnimation(const std::string name, Animation *animation) {
 }
 
 void Sprite::update(uint32_t time) {
+    if (isEnemy) {
+
+        if (time - replicatedAt > 50) { // enemy movement speed
+            replicatedAt = time;
+            move(std::rand() % 3 + 1);
+            if (posRect.y > 600) { // screen height
+                posRect.y = 0;
+            }
+
+            if (posRect.x < 0) {
+                move(2);
+            }
+
+            if (posRect.x > 800 - 66) { // screen width sprite width
+                posRect.x -= abs(posRect.x - 800 + 66);
+                move(1);
+            }
+        }
+
+        if (isBullet) {
+            move(4);
+        }
+    }
     Animation *animation = animations[currentAnimation].get();
 
     srcRect = animation->getFrame(time);

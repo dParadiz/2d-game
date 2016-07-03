@@ -129,10 +129,18 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
             }
             lua_pop(L, 1);
 
-            lua_getfield(L, -1, "bullet");
+            lua_getfield(L, -1, "ammunition");
             if (lua_toboolean(L, -1)) {
                 std::cout << "Setting bullet flag for the sprite"<< std::endl;
-                sprite->isBullet =  (bool)lua_toboolean(L, -1);
+                sprite->isAmmunition =  (bool)lua_toboolean(L, -1);
+            }
+            lua_pop(L, 1);
+
+
+            lua_getfield(L, -1, "enemyAI");
+            if (lua_toboolean(L, -1)) {
+                std::cout << "Setting enemyAI flag for the sprite"<< std::endl;
+                sprite->isEnemy =  (bool)lua_toboolean(L, -1);
             }
             lua_pop(L, 1);
 

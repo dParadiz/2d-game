@@ -42,12 +42,15 @@ public:
     bool replicateAndMove = false;
     uint32_t replicatedAt;
     bool canBeRemoved = false;
+    bool isEnemy = false;
     bool isClone = false;
+    bool isAmmunition = false;
 
 private:
     SDL_Rect srcRect = {0, 0, 0, 0};
     SDL_Rect posRect = {0, 0, 0, 0};
 
+    void move(const int d);
     std::string currentAnimation;
     std::map<const std::string, std::shared_ptr<Animation>> animations;
 

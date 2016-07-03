@@ -36,16 +36,18 @@ void Scene::update(uint32_t time) {
 
     for (Sprite * sprite: spriteList) {
 
-        if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 1000) {
-            sprite->replicateAndMove = false;
+        if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 1000) { // shooting speed
             sprite->replicatedAt = time;
             Sprite *spriteReplica = sprite->clone();
             spriteReplica->isControllable = false;
             spriteReplica->replicateAndMove = false;
+            spriteReplica->isBullet = true;
             spriteReplica->isVisible = true;
 
             v.push_back(spriteReplica);
         }
+
+        sprite->replicateAndMove = false;
 
         sprite->update(time);
         //clean up sprites
