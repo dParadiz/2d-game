@@ -116,21 +116,21 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
             lua_pop(L, 1);
 
             lua_getfield(L, -1, "controllable");
-            if (lua_toboolean(L, -1)) {
+            if (lua_isboolean(L, -1)) {
                 std::cout << "Setting controllable flag for the sprite"<< std::endl;
                 sprite->isControllable = (bool)lua_toboolean(L, -1);
             }
             lua_pop(L, 1);
 
             lua_getfield(L, -1, "hidden");
-            if (lua_toboolean(L, -1)) {
+            if (lua_isboolean(L, -1)) {
                 std::cout << "Setting visible flag for the sprite"<< std::endl;
                 sprite->isVisible =  !(bool)lua_toboolean(L, -1);
             }
             lua_pop(L, 1);
 
             lua_getfield(L, -1, "ammunition");
-            if (lua_toboolean(L, -1)) {
+            if (lua_isboolean(L, -1)) {
                 std::cout << "Setting bullet flag for the sprite"<< std::endl;
                 sprite->isAmmunition =  (bool)lua_toboolean(L, -1);
             }
@@ -138,7 +138,7 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
 
 
             lua_getfield(L, -1, "enemyAI");
-            if (lua_toboolean(L, -1)) {
+            if (lua_isboolean(L, -1)) {
                 std::cout << "Setting enemyAI flag for the sprite"<< std::endl;
                 sprite->isEnemy =  (bool)lua_toboolean(L, -1);
             }
@@ -161,6 +161,13 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
                     std::cout << "Adding animation '" << animationName << "' to sprite with textureId '" << textureId <<
                     "'" << std::endl;
 
+                    int fps = 0;
+                    lua_getfield(L, -1, "fps");
+                    if (lua_isnumber(L, -1)) {
+                        std::cout << "Setting fps rate for animation" << std::endl;
+                        fps = (int) lua_tonumber(L, -1);
+                    }
+                    lua_pop(L, 1);
 
                     // get animation sequences
                     std::vector<SDL_Rect> sequence;
@@ -181,7 +188,11 @@ void SceneFactory::loadSprites(lua_State *L, Scene *scene) {
                     }
                     lua_pop(L, 1);
 
-                    sprite->addAnimation(animationName, new Animation(sequence, textureId));
+
+                    Animation * animation = new Animation(sequence, textureId);
+                    animation->setFps(fps);
+
+                    sprite->addAnimation(animationName, animation);
 
                 }
                 lua_pop(L, 1);

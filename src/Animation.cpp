@@ -9,10 +9,15 @@ Animation::Animation(const std::vector<SDL_Rect> &frames, const std::string &tex
 
 SDL_Rect Animation::getFrame(Uint32 time) {
 
-    if (timeTick != fps * time / 1000) {
-        ++frame;
-        timeTick = fps * time / 1000;
+    if (fps == 0) {
+        return frames.at(0);
     }
+
+    if (time - timeTick > fps) {
+        ++frame;
+        timeTick = time;
+    }
+
     // loop
     if (frame >= frames.size()) {
         frame = 0;
@@ -23,6 +28,12 @@ SDL_Rect Animation::getFrame(Uint32 time) {
 
 
 void Animation::setFps(int targetFps) {
+
+    if (targetFps < 1) {
+        fps = 0;
+        return;
+    }
+
     fps = 1000 / targetFps;
 }
 

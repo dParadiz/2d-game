@@ -3,8 +3,10 @@ animationsList = {
     player = {
         textureId = "player",
         name = "player",
+        fps = 5,
         sequence = {
-            { 0, 0, 99, 75 }
+            { 0, 0, 99, 75 },
+			{ 0, 75, 99, 75 },
         }
     },
     enemy = {
@@ -61,6 +63,17 @@ sprites = {
         enemyAI = true,
 
     },
+ {
+        startPos = { 100, 0, 66, 50 },
+        startingAnimation = "enemy",
+        animations = {
+            animationsList.enemy
+        },
+        controllable = false,
+        enemyAI = true,
+
+    },
+
     {
         startPos = { 100, 50, 66, 50 },
         startingAnimation = "enemy",

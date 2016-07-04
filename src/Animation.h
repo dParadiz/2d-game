@@ -25,7 +25,7 @@ private:
     std::vector<SDL_Rect> frames;
     Uint32 timeTick = 0;
     std::string textureId;
-    int fps = 24;
+    int fps = 0;
 };
 
 
