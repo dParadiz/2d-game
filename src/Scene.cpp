@@ -2,6 +2,10 @@
 #include <algorithm>
 #include "Scene.h"
 
+
+const int GRID_W = 80;
+const int GRID_H  = 80;
+
 void Scene::addSprite(Sprite *sprite) {
     spriteList.push_back(sprite);
 }
@@ -28,13 +32,25 @@ void Scene::draw() {
         SDL_RenderCopy(renderer, texture, sprite->getSrcRect(), sprite->getPosition());
     }
 
+    //grid
+    /*for(int i = 0; i < 10; i++) {
+        SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_RenderDrawLine(renderer, i* GRID_W, 0, i * GRID_W, 600);
+    }
+
+    for(int i = 0; i < 10; i++) {
+        SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_RenderDrawLine(renderer, 0, i*GRID_H, 800, i*GRID_H);
+    }*/
+
+    SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0x00 );
     SDL_RenderPresent(renderer);
 }
 
 void Scene::update(uint32_t time) {
     std::vector<Sprite *> v;
 
-    for (Sprite * sprite: spriteList) {
+    for (Sprite *sprite: spriteList) {
 
         if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 1000) { // shooting speed
             sprite->replicatedAt = time;
@@ -53,6 +69,93 @@ void Scene::update(uint32_t time) {
         //clean up sprites
         if (sprite->getPosition()->y < 0) {
             sprite->canBeRemoved = true;
+        }
+
+    }
+
+    // check for collision
+    // get sprites in same grid space
+    int gridW = GRID_W;
+    int gridH = GRID_H;
+
+    std::map<const std::string, std::vector<Sprite *>> collisionMap;
+
+    for (Sprite *sprite: spriteList) {
+        SDL_Rect *rect = sprite->getPosition();
+        int posX = rect->x / gridW;
+        int posW = (rect->x + rect->w) / gridW;
+        int posY = rect->y / gridH;
+        int posH = (rect->y + rect->h) / gridH;
+
+        // collision only for bullets and enemies
+        if (!(sprite->isBullet || sprite->isEnemy)) {
+            continue;
+        }
+
+        std::string cord;
+        // grid tile must be big enough, not to split spites in more then 4 pieces
+        cord = std::to_string(posX) + "_" + std::to_string(posY);
+
+        if (collisionMap.find(cord) != collisionMap.end()) {
+            std::vector<Sprite *> spriteList;
+            collisionMap.insert(std::pair<const std::string, std::vector<Sprite *>>(cord, spriteList));
+        }
+        collisionMap[cord].push_back(sprite);
+
+        if (cord != std::to_string(posW) + "_" + std::to_string(posY)) {
+            cord = std::to_string(posW) + "_" + std::to_string(posY);
+
+            if (collisionMap.find(cord) != collisionMap.end()) {
+                std::vector<Sprite *> spriteList;
+                collisionMap.insert(std::pair<const std::string, std::vector<Sprite *>>(cord, spriteList));
+            }
+            collisionMap[cord].push_back(sprite);
+        }
+
+        if (cord != std::to_string(posX) + "_" + std::to_string(posH)) {
+            cord = std::to_string(posX) + "_" + std::to_string(posH);
+            if (collisionMap.find(cord) != collisionMap.end()) {
+                std::vector<Sprite *> spriteList;
+                collisionMap.insert(std::pair<const std::string, std::vector<Sprite *>>(cord, spriteList));
+            }
+            collisionMap[cord].push_back(sprite);
+        }
+
+        if (cord != std::to_string(posW) + "_" + std::to_string(posH)) {
+            cord = std::to_string(posW) + "_" + std::to_string(posH);
+
+            if (collisionMap.find(cord) != collisionMap.end()) {
+                std::vector<Sprite *> spriteList;
+                collisionMap.insert(std::pair<const std::string, std::vector<Sprite *>>(cord, spriteList));
+            }
+            collisionMap[cord].push_back(sprite);
+        }
+
+    }
+
+    for (auto &iter: collisionMap) {
+        if (iter.second.capacity() > 1) {
+            Sprite *sSprite;
+            sSprite = iter.second.back();
+            iter.second.pop_back();
+
+            if (!sSprite->canBeRemoved) {
+                for (Sprite *sprite:iter.second) {
+
+                    if (sprite->canBeRemoved  // already removed no collision needed
+                        || sSprite->isEnemy && sprite->isEnemy // enemies don't collied between them self
+                        || sSprite->isBullet && sprite->isBullet // bullets don't collied between them self
+                            ) {
+                        continue;
+                    }
+
+                    if (SDL_HasIntersection(sprite->getPosition(), sSprite->getPosition())) {
+
+                        sSprite->canBeRemoved = true;
+                        sprite->canBeRemoved = true;
+                    }
+                }
+            }
         }
 
     }
