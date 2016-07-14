@@ -33,19 +33,19 @@ void Sprite::notify(const Uint8 *state) {
 
 void Sprite::move(const int direction) {
     if (direction == 1) {
-        posRect.x -= 10;
+        posRect.x -= 5;
     }
 
     if (direction == 2) {
-        posRect.x += 10;
+        posRect.x += 5;
     }
 
     if (direction == 4) {
-        posRect.y -= 10;
+        posRect.y -= 5;
     }
 
     if (direction == 3 ) {
-        posRect.y += 10;
+        posRect.y += 5;
     }
 
 
@@ -91,10 +91,12 @@ void Sprite::update(uint32_t time) {
 
         if (time - replicatedAt > 50) { // enemy movement speed
             replicatedAt = time;
-            move(std::rand() % 3 + 1);
+            move(std::rand() % 2 + 1);
             if (posRect.y > 600) { // screen height
                 posRect.y = 0;
             }
+
+            posRect.y += 1; // prefer down moment
 
             if (posRect.x < 0) {
                 move(2);
@@ -105,11 +107,12 @@ void Sprite::update(uint32_t time) {
                 move(1);
             }
         }
-
-        if (isBullet) {
-            move(4);
-        }
     }
+
+    if (isBullet) {
+        move(4);
+    }
+
     Animation *animation = animations[currentAnimation].get();
 
     srcRect = animation->getFrame(time);
