@@ -60,7 +60,30 @@ void SceneFactory::loadTextures(lua_State *L, Scene *scene) {
                 std::cout << "Could not load image: " << SDL_GetError() << std::endl;
             } else {
                 SDL_SetColorKey(image, SDL_TRUE, SDL_MapRGB(image->format, tColor.r, tColor.g, tColor.b));
-                scene->addTexture(lua_tostring(L, -2), SDL_CreateTextureFromSurface(scene->getRenderer(), image));
+
+                SDL_PixelFormat* pixelFormat = image->format;
+                int bpp = pixelFormat->BytesPerPixel;
+
+                std::vector<std::vector<int>> collisionMatrix((unsigned long) image->h, std::vector<int>(
+                        (unsigned long) image->w, 0));;
+
+                for(int x = 0; x < image->h;x++) {
+                    for(int y = 0;  y < image->w;y++) {
+                        Uint8* p = (Uint8*)image->pixels + x * image->pitch + y * bpp;
+                        Uint8 red, green, blue, alpha;
+                        SDL_GetRGBA(*p, pixelFormat, &red, &green, &blue, &alpha);
+
+                        if (alpha == 255) {
+                            collisionMatrix[x][y] = 1;
+                        } else {
+                            collisionMatrix[x][y] = 0;
+                        }
+                    }
+                }
+
+
+                scene->addTexture(lua_tostring(L, -2), SDL_CreateTextureFromSurface(scene->getRenderer(), image), collisionMatrix);
+
             }
             SDL_FreeSurface(image);
         }

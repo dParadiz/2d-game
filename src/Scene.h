@@ -8,6 +8,7 @@
 class Scene {
 private:
     std::map<const std::string, SDL_Texture *> textures;
+    std::map<const std::string, std::vector<std::vector<int>>> collisionMatrices;
     SDL_Renderer *renderer;
 
 public:
@@ -25,7 +26,7 @@ public:
 
     void update(uint32_t time);
 
-    void addTexture(const std::string name, SDL_Texture *texture);
+    void addTexture(const std::string name, SDL_Texture *texture, std::vector<std::vector<int>> collisionMatrix);
 
     SDL_Renderer *getRenderer();
 };

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Scene.h"
-
+#include <unistd.h>
 
 const int GRID_W = 80;
 const int GRID_H  = 80;
@@ -52,7 +52,7 @@ void Scene::update(uint32_t time) {
 
     for (Sprite *sprite: spriteList) {
 
-        if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 1000) { // shooting speed
+        if (sprite->replicateAndMove && (time - sprite->replicatedAt) > 500) { // shooting speed
             sprite->replicatedAt = time;
             Sprite *spriteReplica = sprite->clone();
             spriteReplica->isControllable = false;
@@ -148,11 +148,40 @@ void Scene::update(uint32_t time) {
                             ) {
                         continue;
                     }
+                    SDL_Rect intersectionRect;
+                    if (SDL_IntersectRect(sprite->getPosition(), sSprite->getPosition(), &intersectionRect)) {
+                        //std::cout << intersectionRect.x << " " << intersectionRect.y << " " << intersectionRect.w << " " << intersectionRect.h << std::endl;
+                        //std::cout << sprite->getPosition()->x << " " << sprite->getPosition()->y << " " << sprite->getPosition()->w << " " << sprite->getPosition()->h << std::endl;
+                        //std::cout << sSprite->getPosition()->x << " " << sSprite->getPosition()->y << " " << sSprite->getPosition()->w << " " << sSprite->getPosition()->h << std::endl;
+                        //std::cout << "==========" << std::endl;
+                        int w = intersectionRect.w;
+                        int h = intersectionRect.h;
 
-                    if (SDL_HasIntersection(sprite->getPosition(), sSprite->getPosition())) {
+                        int x1 = intersectionRect.x - sprite->getPosition()->x;
+                        int x2 = intersectionRect.x - sSprite->getPosition()->x;
 
-                        sSprite->canBeRemoved = true;
-                        sprite->canBeRemoved = true;
+                        int y1 = intersectionRect.y - sprite->getPosition()->y;
+                        int y2 = intersectionRect.y - sSprite->getPosition()->y;
+
+                        std::vector<std::vector<int>>coll1 = collisionMatrices[sprite->getTextureId()];
+                        std::vector<std::vector<int>>coll2 = collisionMatrices[sSprite->getTextureId()];
+
+
+                        //bool stop = false;
+                        //for(int i = 0; i < h; ++i) {
+                        //    for(int j =0; j < w; ++j) {
+                        //       std::cout << i+y1 << " " << j+x1 << " : " << i+y2 << " " << j +x2 << std::endl;
+                        //        if (coll1[i+y1][j+x1] * coll2[i+y2][j+x2]) {
+                                    sSprite->isBullet = false;
+                                    sprite->isBullet = false;
+                        //           stop = true;
+                        //           break;
+                        //       }
+                        //   }
+                        //    if (stop) {
+                        //        break;
+                        //    }
+                        //}
                     }
                 }
             }
@@ -165,23 +194,22 @@ void Scene::update(uint32_t time) {
     spriteList.insert(spriteList.end(), v.begin(), v.end());
 }
 
-void Scene::addTexture(const std::string name, SDL_Texture *texture) {
+void Scene::addTexture(const std::string name, SDL_Texture *texture, std::vector<std::vector<int>> collisionMatrix) {
     std::cout << "Adding texture " << name << " to scene" << std::endl;
     textures.insert(std::pair<const std::string, SDL_Texture *>(name, texture));
+    collisionMatrices.insert(std::pair<const std::string, std::vector<std::vector<int>>>(name, collisionMatrix));
 }
 
 Scene::~Scene() {
 
     // clean up textures
-    for (std::map<const std::string, SDL_Texture *>::iterator it = textures.begin(); it != textures.end(); ++it) {
-        if (it->second != nullptr) {
-            std::cout << "Destroying texture " << it->first << std::endl;
-            SDL_DestroyTexture(it->second);
+    for (auto &it:textures) {
+        if (it.second != nullptr) {
+            std::cout << "Destroying texture " << it.first << std::endl;
+            SDL_DestroyTexture(it.second);
         }
     }
-
     textures.clear();
-
 
 }
 
